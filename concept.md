@@ -45,14 +45,14 @@ Let us know via api@ninjarmm.com.
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
      - [Python3](#python3-1)
-       - [Using an API Key](#using-an-api-key)
+       - [Using an API Key](#using-an-api-key-1)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
        - [Leverage OAuth2](#leverage-oauth2)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
    - [Creating a Ticket](#creating-a-ticket)
-     - [Accessing the API](#accessing-the-api)
+     - [Accessing the API](#accessing-the-api-2)
      - [PowerShell 5.1](#powershell-51-1)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
@@ -131,7 +131,7 @@ In this example we'll be using a:
 To authenticate with client credentials to NinjaOne we'll formulate a request using our access variables to generate an access token that we'll then use to pull a list of devices.
 Noteworthy in this example:
 * protect your client_secret using securestring and nullifying the variable after usage to maintain security
-```
+```powershell
 $headers = @{
     "Content-Type" = "application/x-www-form-urlencoded"
 }
@@ -154,7 +154,7 @@ with the access token in place, we can use it to make a request to NinjaOne API 
 Noteworthy in this example:
 * The | ("pipe") passes the output from one command to another
 * `$response | ConvertFrom-Json | ConvertTo-Json -Depth 100` is used to "pretty print" the NinjaOne API response for easier human reading.
-```
+```powershell
 $headers = @{
     "Accept" = "application/json"
     "Authorization" = "Bearer $access_token"
@@ -163,7 +163,7 @@ $response = Invoke-WebRequest -Uri "https://$($region).ninjarmm.com/v2/devices" 
 $response | ConvertFrom-Json | ConvertTo-Json -Depth 100
 ```
 ### Oauth2 pull list example
-```
+```powershell
 $region = Read-Host "Enter a region, e.g., CA"
 $client_id = Read-Host "Enter the client_id"
 $client_secret = Read-Host "Enter the client_secret" -AsSecureString
@@ -213,7 +213,7 @@ $response | ConvertFrom-Json | ConvertTo-Json -Depth 100
 ## Python3
 ### API Key pull list example
 
-```
+```python
 import requests
 import getpass
 import json
@@ -252,6 +252,7 @@ response = requests.get(url, headers=headers)
 print(json.dumps(response.json(), indent=4))
 ```
 ### Oauth2 pull list example
+```python
 import requests
 import getpass
 import json
@@ -306,10 +307,7 @@ headers = {
 
 response = requests.get(url, headers=headers)
 print(json.dumps(response.json(), indent=4))
-
-
-
-
+```
 
 # Creating a NinjaOne Ticket
 ## Generate an API key
@@ -323,7 +321,7 @@ In this example we'll be using a:
 * Authorization Code
 ## Powershell 5.1
 ### Oauth2 example
-```
+```powershell
 function Throw-ErrorResponseWithResultCode {
     param (
         [Parameter(Mandatory=$true)]
@@ -540,7 +538,7 @@ if (($response.StatusCode -eq 200 -or $response.StatusCode -eq 201) -and $respon
 
 ## Python3
 ### Oauth2 example
-```
+```python
 import requests
 import getpass
 import json
@@ -726,7 +724,7 @@ In this example we'll be using a:
 ## Powershell 5.1
 ### Oauth2 example
 THIS IS MISSING PARAMETERS
-```
+```powershell
 function Throw-ErrorResponseWithResultCode {
     param (
         [Parameter(Mandatory=$true)]
@@ -927,7 +925,7 @@ if (($response.StatusCode -eq 200 -or $response.StatusCode -eq 201) -and $respon
 
 ## Python3
 ### Oauth2 example
-```
+```python
 import requests
 import getpass
 import json
@@ -1081,7 +1079,7 @@ In this example we'll be using a:
 * Authorization Code
 ## Powershell 5.1
 ### Oauth2 example
-```
+```powershell
 function Throw-ErrorResponseWithResultCode {
     param (
         [Parameter(Mandatory=$true)]
@@ -1263,7 +1261,7 @@ if ($response.StatusCode -eq 200 -or $response.StatusCode -eq 201) {
 
 ## Python3
 ### Oauth2 example
-```
+```python
 import requests
 import getpass
 import json
@@ -1456,148 +1454,3 @@ SOFTWARE.
 Thanks to the following contributors:
 - [Josh Lambert](https://github.com/nimdaus)
 - [Could Be You!](https://www.ninjaone.com/careers/)
-
-# API 5 creating documentation WORK IN PROGRESS
-
-##Python3
-```
-import requests
-import getpass
-import json
-import webbrowser
-
-def throw_error_response_with_result_code(response, message):
-    result_code_message = f"\nStated reason: {response.json().get('resultCode')}" if 'resultCode' in response.json() else ""
-    raise Exception(f"\n{message}\nUnexpected Status Code: {response.status_code}{result_code_message}")
-
-def display_table(data, sort_key, second_column_key, title):
-    print(f"\n{title}\n")
-    sorted_data = sorted(data, key=lambda x: x[sort_key])
-    for item in sorted_data:
-        print(f"{item[sort_key]:<20} {item[second_column_key]}")
-    print("\n")
-
-def prompt_int(message, default):
-    while True:
-        user_input = input(f"{message} (Default: {default}): ")
-        if not user_input.strip():
-            return default
-        try:
-            return int(user_input)
-        except ValueError:
-            print("Invalid input. Please enter a valid integer.")
-
-def prompt_choice(message, default, choices):
-    print(message)
-    for index, choice in enumerate(choices, start=1):
-        print(f"{index}: {choice}")
-    
-    default_index = choices.index(default) + 1
-    while True:
-        user_input = input(f"Select an option by number (Default: {default_index}): ")
-        if not user_input.strip():
-            return default
-        if user_input.isdigit() and 1 <= int(user_input) <= len(choices):
-            return choices[int(user_input) - 1]
-        else:
-            print("Invalid choice. Please select a valid number.")
-
-def filter_json_by_id(json_data, id_value):
-
-    if isinstance(json_data, list):
-        return [obj for obj in json_data if obj.get("id") == id_value]
-    elif isinstance(json_data, dict):
-        if json_data.get("id") == id_value:
-            return json_data
-    return None
-
-region = input("Enter region: ")
-client_id = input("Enter client_id: ")
-client_secret = getpass.getpass("Enter your client_secret(no visible input): ")
-response_type = "code"
-redirect_uri = input("Enter redirect_uri: ")
-scope = input("Enter *SPACE* separated scope, e.g., control management monitoring: ")
-
-auth_url = (
-    f"https://{region}.ninjarmm.com/ws/oauth/authorize?"
-    f"response_type={response_type}&"
-    f"client_id={client_id}&"
-    f"client_secret={client_secret}&"
-    f"redirect_uri={redirect_uri}&"
-    f"scope={scope}"
-)
-
-print("Opening browser for authentication...")
-webbrowser.open(auth_url, new=1, autoraise=True)
-
-print(f"\nIf the browser does not open, please navigate to the following URL to authenticate:\n{auth_url}")
-
-code = input("Please enter the NinjaOne authorization code from the redirect URL: ")
-
-url = f"https://{region}.ninjarmm.com/ws/oauth/token"
-
-payload = {
-    "grant_type": "authorization_code",
-    "client_id": f"{client_id}",
-    "client_secret": f"{client_secret}",
-    "code": f"{code}",
-    "redirect_uri": f"{redirect_uri}"
-}
-
-headers = {"Content-Type": "application/x-www-form-urlencoded"}
-response = requests.post(url, data=payload, headers=headers)
-
-response_data = response.json()
-
-access_token = response_data["access_token"]
-
-headers = {
-    "Accept": "application/json",
-    "Authorization": "Bearer {access_token}"
-}
-
-# Fetch organizations
-response = requests.get(f"https://{region}.ninjarmm.com/v2/organizations", headers=headers)
-if response.status_code == 200:
-    organizations = response.json()
-    display_table(organizations, 'id', 'name', "Organizations")
-    organization_id = prompt_int("Enter the applicable organization ID", 1)
-else:
-    throw_error_response_with_result_code(response, "Organization Collection Failed")
-
-# Fetch document templates
-response = requests.get(f"https://{region}.ninjarmm.com/v2/document-templates", headers=headers)
-if response.status_code == 200:
-    document_templates = response.json()
-    display_table(document_templates, 'id', 'name', "Document Templates")
-    document_template_id = prompt_int("Enter the applicable document_template ID", 1)
-    selected_template = next((attr for attr in ticket_attributes if attr['id'] == document_template_id), None)
-    if selected_template:
-        template_fields = selected_template['fields']
-        print(f"\nAvailable Values for Attribute '{selected_template['name']}':\n")
-        for field in template_fields:
-            print(f"Field Label: {field['fieldLabel']} | Field Name: {field['fieldlabel']} | Field Description: {field['fieldDescription']}")
-        
-else:
-    throw_error_response_with_result_code(response, "Organization Collection Failed")
-
-payload = {
-    "documentName": "string",
-    "documentDescription": "string",
-    "fields": {
-        "property1": {},
-        "property2": {}
-    }
-}
-headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer undefined"
-}
-
-response = requests.post(f"https://app.ninjarmm.com/v2/organization/{organization_id}/template/{document_template_id}/document", json=payload, headers=headers)
-
-print(response.json())
-
-
-```
