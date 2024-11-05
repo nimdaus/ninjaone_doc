@@ -10,11 +10,23 @@ In each tour, we'll guide you through:
 
 We’ll also show you how to test your code against mocked API environments using dummy data, giving you a safe space to build and troubleshoot with confidence before going live.
 
+[!TIP]
+If you're looking for a quick way to access and update NinjaOne Device Custom Fields, don't forget to check out [NinjaOne Property Get/Set Commands](https://www.ninjaone.com/docs/endpoint-management/custom-fields/advanced-custom-fields/#:~:text=Ninja%2DProperty%2DGet%20is%20NinjaOne's,%2DProperty%2DSet%20fieldName%20Value.)
+
 ## Pre-requisites:
 * On Windows check you're running Powershell 5.1.
-** ```$PSVersionTable.PSVersion```
-* Check you're running a modern Python 3 version, e.g., 3.11+
-** ```python3 --version```
+```powershell
+$PSVersionTable.PSVersion
+```
+* Check you're running a modern Python3 version (3.11+):
+```python
+python3 --version
+```
+
+## Last Updated
+This guide was last reviewed on **[2024/11/05]**.
+Our goal is to keep documentation always up-to-date, but we won't always see the issues or potential improvements before you do.
+Let us know via api@ninjarmm.com.
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -23,24 +35,24 @@ We’ll also show you how to test your code against mocked API environments usin
    - [Testing Code](#testing-code)
    - [Step-by-Step Guide](#step-by-step-guide)
 4. [API Tours](#api-tours)
-   - [Authentication and Listing Devices](#authentication-and-listing-devices)
-     - [Generate an API Key](#generate-an-api-key)
+   - [Listing NinjaOne Devices](#listing-ninjaone-devices)
+     - [Accessing the API](#accessing-the-api)
      - [PowerShell 5.1](#powershell-51)
-       - [API Key Example](#api-key-pull-list-example)
+       - [Using an API Key](#using-an-api-key)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
-       - [OAuth2 Example](#oauth2-pull-list-example)
+       - [Leverage OAuth2](#leverage-oauth2)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
      - [Python3](#python3-1)
-       - [API Key Example](#api-key-pull-list-example-1)
+       - [Using an API Key](#using-an-api-key)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
-       - [OAuth2 Example](#oauth2-pull-list-example-1)
+       - [Leverage OAuth2](#leverage-oauth2)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
    - [Creating a Ticket](#creating-a-ticket)
-     - [Generate an API Key](#generate-an-api-key)
+     - [Accessing the API](#accessing-the-api)
      - [PowerShell 5.1](#powershell-51-1)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
@@ -48,7 +60,7 @@ We’ll also show you how to test your code against mocked API environments usin
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
    - [Triggering a Script](#triggering-a-script)
-     - [Generate an API Key](#generate-an-api-key)
+     - [Accessing the API](#accessing-the-api)
      - [PowerShell 5.1](#powershell-51-2)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
@@ -56,7 +68,7 @@ We’ll also show you how to test your code against mocked API environments usin
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
    - [Updating Device Custom Fields](#updating-device-custom-fields)
-     - [Generate an API Key](#generate-an-api-key)
+     - [Accessing the API](#accessing-the-api)
      - [PowerShell 5.1](#powershell-51-3)
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
@@ -64,7 +76,7 @@ We’ll also show you how to test your code against mocked API environments usin
          - [Authentication: Getting an Access Token](#authentication-getting-an-access-token)
          - [Get-DevicesList: Making a Request](#get-deviceslist-making-a-request)
 
-# Mock server
+# Using a mock server
 ## Testing code
 A mock server simulates an API by returning predefined static or dynamic responses based on the structure and details in an API specification, like OpenAPI. It allows developers to test and interact with the API's endpoints without needing a fully functional backend, making it easier to build and test front-end applications or integration points early in development.
 
@@ -103,7 +115,7 @@ bash
 ```curl http://127.0.0.1:4010/v2/devices```
 Prism will return the mock response defined for /devices in the NinjaOne OpenAPI spec file, allowing you to test the NinjaOne API’s behavior and interactions.
 
-# API tour for authentication (and listing devices)
+# Listing NinjaOne Devices
 ## Generate an API key
 LINK TO NINJAONE DOCUMENTATION
 
@@ -151,7 +163,6 @@ $response = Invoke-WebRequest -Uri "https://$($region).ninjarmm.com/v2/devices" 
 $response | ConvertFrom-Json | ConvertTo-Json -Depth 100
 ```
 ### Oauth2 pull list example
-
 ```
 $region = Read-Host "Enter a region, e.g., CA"
 $client_id = Read-Host "Enter the client_id"
@@ -300,7 +311,7 @@ print(json.dumps(response.json(), indent=4))
 
 
 
-# API tour for creating a ticket
+# Creating a NinjaOne Ticket
 ## Generate an API key
 LINK TO NINJAONE DOCUMENTATION
 
@@ -702,7 +713,7 @@ else:
 ```
 
 
-# API tour for triggering a script
+# Triggering a NinjaOne Device Script
 ## Generate an API key
 LINK TO NINJAONE DOCUMENTATION
 
@@ -1058,7 +1069,7 @@ else:
     throw_error_response_with_result_code(response, "Device Script Collection Failed")
 ```
 
-# API tour for update device custom field // adding documentation/custom field
+# Updating a NinjaOne Device Custom Field
 ## Generate an API key
 LINK TO NINJAONE DOCUMENTATION
 
@@ -1401,6 +1412,192 @@ else:
     throw_error_response_with_result_code(response, "Custom field update failed")
 ```
 
+# Next Steps
+Congratulations on exploring the NinjaOne API concepts! We hope these steps have set you up for success and sparked ideas for creating impactful solutions. We’re excited to see how you build and contribute to the community.
+
+<ins>Wondering what to do next?</ins>
+
+- Try working with webhooks
+ - Set up a condition in NinjaOne and configure webhooks to relay the triggered information, so you can react to events in real time.
+- Experiment with cross-platform integrations
+ - Use another vendor’s API to write data to NinjaOne or synchronize information between platforms for seamless functionality.
+- Show off your automation skills
+ - Create a report or dashboard that tracks the metrics most important to you and your team—enhancing insights and efficiency.
+
+# More Information
+## Disclaimer
+The NinjaOne API Tours aim to provide a foundational resource to help you access and manage data within NinjaOne. We offer API documentation and code samples to help you understand the platform’s data architecture and how it can integrate with various projects. While we strive for accuracy, please note that our team, though experienced, may make mistakes. Consequently, this information is provided "as-is," without warranties or guarantees regarding accuracy or completeness, and we disclaim liability for any damages resulting from its use. We strongly encourage testing your code (e.g., via mock servers) before deploying it in production. For further questions on the API or development guidance, please contact api@ninjarmm.com or consult a qualified professional.
+
+## License
+MIT License applicable to all API Tour examples presented on this page.
+
+Copyright (c) [2024] [NinjaOne]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Credits
+
+Thanks to the following contributors:
+- [Josh Lambert](https://github.com/nimdaus)
+- [Could Be You!](https://www.ninjaone.com/careers/)
+
+# API 5 creating documentation WORK IN PROGRESS
+
+##Python3
+```
+import requests
+import getpass
+import json
+import webbrowser
+
+def throw_error_response_with_result_code(response, message):
+    result_code_message = f"\nStated reason: {response.json().get('resultCode')}" if 'resultCode' in response.json() else ""
+    raise Exception(f"\n{message}\nUnexpected Status Code: {response.status_code}{result_code_message}")
+
+def display_table(data, sort_key, second_column_key, title):
+    print(f"\n{title}\n")
+    sorted_data = sorted(data, key=lambda x: x[sort_key])
+    for item in sorted_data:
+        print(f"{item[sort_key]:<20} {item[second_column_key]}")
+    print("\n")
+
+def prompt_int(message, default):
+    while True:
+        user_input = input(f"{message} (Default: {default}): ")
+        if not user_input.strip():
+            return default
+        try:
+            return int(user_input)
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
+
+def prompt_choice(message, default, choices):
+    print(message)
+    for index, choice in enumerate(choices, start=1):
+        print(f"{index}: {choice}")
+    
+    default_index = choices.index(default) + 1
+    while True:
+        user_input = input(f"Select an option by number (Default: {default_index}): ")
+        if not user_input.strip():
+            return default
+        if user_input.isdigit() and 1 <= int(user_input) <= len(choices):
+            return choices[int(user_input) - 1]
+        else:
+            print("Invalid choice. Please select a valid number.")
+
+def filter_json_by_id(json_data, id_value):
+
+    if isinstance(json_data, list):
+        return [obj for obj in json_data if obj.get("id") == id_value]
+    elif isinstance(json_data, dict):
+        if json_data.get("id") == id_value:
+            return json_data
+    return None
+
+region = input("Enter region: ")
+client_id = input("Enter client_id: ")
+client_secret = getpass.getpass("Enter your client_secret(no visible input): ")
+response_type = "code"
+redirect_uri = input("Enter redirect_uri: ")
+scope = input("Enter *SPACE* separated scope, e.g., control management monitoring: ")
+
+auth_url = (
+    f"https://{region}.ninjarmm.com/ws/oauth/authorize?"
+    f"response_type={response_type}&"
+    f"client_id={client_id}&"
+    f"client_secret={client_secret}&"
+    f"redirect_uri={redirect_uri}&"
+    f"scope={scope}"
+)
+
+print("Opening browser for authentication...")
+webbrowser.open(auth_url, new=1, autoraise=True)
+
+print(f"\nIf the browser does not open, please navigate to the following URL to authenticate:\n{auth_url}")
+
+code = input("Please enter the NinjaOne authorization code from the redirect URL: ")
+
+url = f"https://{region}.ninjarmm.com/ws/oauth/token"
+
+payload = {
+    "grant_type": "authorization_code",
+    "client_id": f"{client_id}",
+    "client_secret": f"{client_secret}",
+    "code": f"{code}",
+    "redirect_uri": f"{redirect_uri}"
+}
+
+headers = {"Content-Type": "application/x-www-form-urlencoded"}
+response = requests.post(url, data=payload, headers=headers)
+
+response_data = response.json()
+
+access_token = response_data["access_token"]
+
+headers = {
+    "Accept": "application/json",
+    "Authorization": "Bearer {access_token}"
+}
+
+# Fetch organizations
+response = requests.get(f"https://{region}.ninjarmm.com/v2/organizations", headers=headers)
+if response.status_code == 200:
+    organizations = response.json()
+    display_table(organizations, 'id', 'name', "Organizations")
+    organization_id = prompt_int("Enter the applicable organization ID", 1)
+else:
+    throw_error_response_with_result_code(response, "Organization Collection Failed")
+
+# Fetch document templates
+response = requests.get(f"https://{region}.ninjarmm.com/v2/document-templates", headers=headers)
+if response.status_code == 200:
+    document_templates = response.json()
+    display_table(document_templates, 'id', 'name', "Document Templates")
+    document_template_id = prompt_int("Enter the applicable document_template ID", 1)
+    selected_template = next((attr for attr in ticket_attributes if attr['id'] == document_template_id), None)
+    if selected_template:
+        template_fields = selected_template['fields']
+        print(f"\nAvailable Values for Attribute '{selected_template['name']}':\n")
+        for field in template_fields:
+            print(f"Field Label: {field['fieldLabel']} | Field Name: {field['fieldlabel']} | Field Description: {field['fieldDescription']}")
+        
+else:
+    throw_error_response_with_result_code(response, "Organization Collection Failed")
+
+payload = {
+    "documentName": "string",
+    "documentDescription": "string",
+    "fields": {
+        "property1": {},
+        "property2": {}
+    }
+}
+headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer undefined"
+}
+
+response = requests.post(f"https://app.ninjarmm.com/v2/organization/{organization_id}/template/{document_template_id}/document", json=payload, headers=headers)
+
+print(response.json())
 
 
-
+```
