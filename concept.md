@@ -622,7 +622,7 @@ access_token = response_data["access_token"]
 
 headers = {
     "Accept": "application/json",
-    "Authorization": "Bearer {access_token}"
+    "Authorization": f"Bearer {access_token}"
 }
 
 # Fetch Ticket Forms
