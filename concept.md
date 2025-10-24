@@ -302,7 +302,7 @@ url = f"https://{region}.ninjarmm.com/v2/devices"
 
 headers = {
     "Accept": "application/json",
-    "Authorization": "Bearer {access_token}"
+    "Authorization": f"Bearer {access_token}"
 }
 
 response = requests.get(url, headers=headers)
